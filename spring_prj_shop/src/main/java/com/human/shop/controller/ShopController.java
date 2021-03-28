@@ -46,14 +46,15 @@ public class ShopController {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	//테스트용
+	//�뀒�뒪�듃�슜
 		@RequestMapping(value="/base_html")
 		public String base_html(Model model) {
 			System.out.println("agree()");
+			int i = 0;
 			return "base_html";
 		}
 	
-//메인홈페이지
+//硫붿씤�솃�럹�씠吏�
 	@RequestMapping("/homes")
 	public String homes(HttpServletRequest request,Model model) {
 		System.out.println("homes()");
@@ -91,8 +92,8 @@ public class ShopController {
 	         return "loginMain";
 	      }else {
 	    	  if (session.getAttribute("notc")==null) {
-	    		  StringBuffer te = new StringBuffer(); //문자열을 추가하거나 변경 할 때 주로 사용하는 타입
-	    		  Random rnd = new Random(); //랜덤함수
+	    		  StringBuffer te = new StringBuffer(); //臾몄옄�뿴�쓣 異붽��븯嫄곕굹 蹂�寃� �븷 �븣 二쇰줈 �궗�슜�븯�뒗 ���엯
+	    		  Random rnd = new Random(); //�옖�뜡�븿�닔
 	    		  for (int i = 0; i < 20; i++) {
 	    		      int rIndex = rnd.nextInt(3);
 	    		      switch (rIndex) {
@@ -110,8 +111,8 @@ public class ShopController {
 	    		          break;
 	    		      }
 	    		  }
-	    		  String temp=te.toString(); //String 변환
-	  			session.setAttribute("notc",temp); //session에 값저장
+	    		  String temp=te.toString(); //String 蹂��솚
+	  			session.setAttribute("notc",temp); //session�뿉 媛믪��옣
 	  			System.out.println("notc=["+temp+"]");
 	  		}
 	         model.addAttribute("newScore",newScore);
@@ -122,7 +123,7 @@ public class ShopController {
 	      
 	   }
 	//-------------------------------------------------------------------------------------------//
-//로그인페이지
+//濡쒓렇�씤�럹�씠吏�
 	@RequestMapping(value="/login")
 	public String login(Model model) {
 		System.out.println("login()");
@@ -131,30 +132,30 @@ public class ShopController {
 	@RequestMapping(value="/logins",method=RequestMethod.POST)
 	   public @ResponseBody String login(HttpServletRequest request,HttpServletResponse response,Model model) {
 	      System.out.println("logins()");  
-	      String id=request.getParameter("ids");//아이디
-	      String pw=request.getParameter("pwd");//비밀번호
+	      String id=request.getParameter("ids");//�븘�씠�뵒
+	      String pw=request.getParameter("pwd");//鍮꾨�踰덊샇
 	      HttpSession session=request.getSession();
 	      IDao dao=sqlSession.getMapper(IDao.class);
 	      loginDto dto=dao.login(id,pw);//DB[select]
 	      if(dto==null) {
-	    	  //없으면 0을 반환시켜 done부분에 alert 띄움
+	    	  //�뾾�쑝硫� 0�쓣 諛섑솚�떆耳� done遺�遺꾩뿉 alert �쓣��
 	         return "0";
 	      }else {
-	    	 //세션에 아이디를 저장
+	    	 //�꽭�뀡�뿉 �븘�씠�뵒瑜� ���옣
 	         session.setAttribute("loginuser",dto);
 	      }
 	      Gson gson=new Gson();
 	      String log=gson.toJson(dto);
 	      return "redirect:homes";
 	   }
-//로그인 아이디 찾기
+//濡쒓렇�씤 �븘�씠�뵒 李얘린
 	@RequestMapping(value="/login_idFind")
 	public String login_idFind(Model model) {
 		System.out.println("login_idFind");
 		return "login_idFind";
 	}
 
-//아이디 찾기
+//�븘�씠�뵒 李얘린
 	@RequestMapping(value="/idFind",method=RequestMethod.POST) 
 	public @ResponseBody String idFind(HttpServletRequest request,Model model) {
       System.out.println("idFind()");
@@ -174,7 +175,7 @@ public class ShopController {
       String a=idFind.getM_id();
       return idFind.m_id;
    }
-//아이디 정보 화면
+//�븘�씠�뵒 �젙蹂� �솕硫�
    @RequestMapping(value="/idInfo",method=RequestMethod.POST) 
    public  String idInfo(HttpServletRequest request,Model model) {
       System.out.println("idInfo()");
@@ -183,13 +184,13 @@ public class ShopController {
       return "idInfo";
    }
    
-//로그인 비밀번호 찾기
+//濡쒓렇�씤 鍮꾨�踰덊샇 李얘린
 	@RequestMapping(value="/login_pwFind")
 	public String login_pwFind(Model model) {
 		System.out.println("login_pwFind()");
 		return "login_pwFind";
 	}
-//비밀번호찾기(login_idFind) -> 인증보내기
+//鍮꾨�踰덊샇李얘린(login_idFind) -> �씤利앸낫�궡湲�
 	@RequestMapping(value="/pwFind",method=RequestMethod.POST)
 	public @ResponseBody String pwFind(HttpServletRequest request,Model model) throws AddressException, MessagingException {
 		IDao dao=sqlSession.getMapper(IDao.class);
@@ -198,7 +199,7 @@ public class ShopController {
 		String name=request.getParameter("loginName");
 		String mail1=request.getParameter("loginMail");
 		String mail2=request.getParameter("loginMail2");
-		String mail=mail1+'@'+mail2; //메일
+		String mail=mail1+'@'+mail2; //硫붿씪
 		
 		System.out.println(mail);
 		Member member=dao.member_pwSelect(mail,id,name);
@@ -206,13 +207,13 @@ public class ShopController {
 			return "0";
 		}
 		model.addAttribute("member",member);
-		//비밀번호찾아주기
-		String pass="당신의 비밀번호는 "+member.member_pw+" 입니다.";
+		//鍮꾨�踰덊샇李얠븘二쇨린
+		String pass="�떦�떊�쓽 鍮꾨�踰덊샇�뒗 "+member.member_pw+" �엯�땲�떎.";
 	    Email emails = new Email();
 	    emails.EmailSend(mail,pass);
 		return "pwInfo";
 	}
-//로그인 비밀번호 찾기
+//濡쒓렇�씤 鍮꾨�踰덊샇 李얘린
 	@RequestMapping(value="/pwInfo",method=RequestMethod.POST)
 	public String pwInfo(HttpServletRequest request,Model model) {
 		System.out.println("pwInfo()");
@@ -221,12 +222,12 @@ public class ShopController {
 		String name=request.getParameter("loginName");
 		String mail1=request.getParameter("loginMail");
 		String mail2=request.getParameter("loginMail2");
-		String mail=mail1+'@'+mail2; //메일
+		String mail=mail1+'@'+mail2; //硫붿씪
 		model.addAttribute("member",dao.member_pwSelect(mail,id,name));
 		return "pwInfo";
 	}
 //-------------------------------------------------------------------------------------------//	
-//로그아웃
+//濡쒓렇�븘�썐
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request,Model model) {
 		System.out.println("logout()");
@@ -238,7 +239,7 @@ public class ShopController {
 	}
 		
 	//-------------------------------------------------------------------------------------------//		
-	   //최신악보
+	   //理쒖떊�븙蹂�
     @RequestMapping(value="/new")
     public String newnew(HttpServletRequest request,Model model) {
     System.out.println("new()");
@@ -258,7 +259,7 @@ public class ShopController {
           return "new";
        }
     }
-    //베스트악보
+    //踰좎뒪�듃�븙蹂�
     @RequestMapping(value="/best")
     public String best(HttpServletRequest request,Model model) {
     System.out.println("best()");
@@ -280,26 +281,26 @@ public class ShopController {
  }
 
 //-------------------------------------------------------------------------------------------//	
-//회원가입 전 동의하기
+//�쉶�썝媛��엯 �쟾 �룞�쓽�븯湲�
 	@RequestMapping(value="/agree")
 	public String agree(Model model) {
 		System.out.println("agree()");
 		return "agree";
 	}
-//회원가입
+//�쉶�썝媛��엯
 	@RequestMapping(value="/join")
 	public String join(Model model) {
 		System.out.println("join()");
 		return "join";
 	}
-//회원가입 후 축하
+//�쉶�썝媛��엯 �썑 異뺥븯
 	@RequestMapping(value="/join_welcome",method=RequestMethod.POST)
 	public String join_welcome(HttpServletRequest request,Model model) {
 		System.out.println("join_welcome()");
 		model.addAttribute("memberName",request.getParameter("joinName"));
 		return "join_welcome";
 	}
-//아이디중복체크
+//�븘�씠�뵒以묐났泥댄겕
    @RequestMapping(value="/join_idchk",method=RequestMethod.POST)
    public @ResponseBody String join_idchk(HttpServletRequest request,Model model) {
       String id=request.getParameter("id");
@@ -309,12 +310,12 @@ public class ShopController {
          return "0";
       }
       System.out.println("member["+member.m_id+"]");
-      Gson gson=new Gson(); //json type으로 반환
+      Gson gson=new Gson(); //json type�쑝濡� 諛섑솚
       String member_id=gson.toJson(member.m_id);
-      return member_id;//done에 return값이 들어감
+      return member_id;//done�뿉 return媛믪씠 �뱾�뼱媛�
       }
 	   
-//이메일 중복체크
+//�씠硫붿씪 以묐났泥댄겕
    @RequestMapping(value="/join_emailchk",method=RequestMethod.POST)
    public @ResponseBody String join_emailchk(HttpServletRequest request,Model model) {
       String mail=request.getParameter("email");
@@ -328,7 +329,7 @@ public class ShopController {
       return member_mail;
    }
 
-//장바구니
+//�옣諛붽뎄�땲
 	@RequestMapping(value="/cart")
 	public String cart(HttpServletRequest request,Model model) {
 		System.out.println("cart()");
@@ -353,7 +354,7 @@ public class ShopController {
 		}
 		
 	}
-//장바구니에 단독상품넣을때 insert여러번 안되게
+//�옣諛붽뎄�땲�뿉 �떒�룆�긽�뭹�꽔�쓣�븣 insert�뿬�윭踰� �븞�릺寃�
 	@RequestMapping(value="/cart_move")
 	public String cart_move(HttpServletRequest request,Model model) {
 		System.out.println("cart_move()");
@@ -374,7 +375,7 @@ public class ShopController {
 			dao.product_cart(dto2.getM_id(),sid,score.getScore_name(),score.getScore_parts(),score.getScore_genre(),cnt,price,total);
 			
 			if(bool.equals("b")){
-				System.out.println("안녕하세요");
+				System.out.println("�븞�뀞�븯�꽭�슂");
 				return "redirect:home";
 			} else  {
 				return "redirect:cart";
@@ -399,13 +400,13 @@ public class ShopController {
 			dao.product_cart(temp,sid,score.getScore_name(),score.getScore_parts(),score.getScore_genre(),cnt,price,total);
 			
 			if(bool.equals("b")){
-				System.out.println("안녕하세요");
+				System.out.println("�븞�뀞�븯�꽭�슂");
 				return "redirect:home";
 			} else  {
 				return "redirect:cart";
 			}	
 	}
-//장바구니 선택삭제	
+//�옣諛붽뎄�땲 �꽑�깮�궘�젣	
 	@RequestMapping(value="/cart_delete")
 	public String cart_Delete(HttpServletRequest request,Model model) {
 		System.out.println("cart_delete()");
@@ -421,7 +422,7 @@ public class ShopController {
 			return "redirect:cart";	
 	}
 
-//장바구니모두비우기
+//�옣諛붽뎄�땲紐⑤몢鍮꾩슦湲�
 	@RequestMapping(value="/cart_empty")
 	public String cart_empty(HttpServletRequest request,Model model) {
 		System.out.println("cart_empty()");
@@ -443,7 +444,7 @@ public class ShopController {
 	
 
 //-------------------------------------------------------------------------------------------//	
-//주문결제창
+//二쇰Ц寃곗젣李�
 	@RequestMapping(value="/pay",produces="text/plain;charset=UTF-8")
 	public String pay(HttpServletRequest request,Model model) {
 		System.out.println("pay()");
@@ -486,13 +487,13 @@ public class ShopController {
 		}
 }
 	
-	//주문결제 완료
+	//二쇰Ц寃곗젣 �셿猷�
 	   @RequestMapping(value="/pay_complete",produces="text/plain;charset=UTF-8")
 	   public String pay_complete(HttpServletRequest request,Model model) {
 	      System.out.println("pay_complete()");
-	      String del = request.getParameter("cart_id");//카트 아이디
-	      String addr = request.getParameter("addr");//주소 배송지
-	      String point = request.getParameter("point"); //적립금
+	      String del = request.getParameter("cart_id");//移댄듃 �븘�씠�뵒
+	      String addr = request.getParameter("addr");//二쇱냼 諛곗넚吏�
+	      String point = request.getParameter("point"); //�쟻由쎄툑
 	      HttpSession session=request.getSession();
 	      loginDto dto2=(loginDto) session.getAttribute("loginuser");
 	      IDao dao=sqlSession.getMapper(IDao.class);
@@ -500,7 +501,7 @@ public class ShopController {
 	      for(int i=0;i<ad.length;i++) {
 	         Cart ca=dao.carts(ad[i]);
 	         System.out.println();
-	         dao.sales_insert(ca.getM_id(),ca.getS_id(),ca.getCart_name(),ca.getCart_parts(),ca.getCart_genre(),ca.getCart_total(),addr);//sales에 넣
+	         dao.sales_insert(ca.getM_id(),ca.getS_id(),ca.getCart_name(),ca.getCart_parts(),ca.getCart_genre(),ca.getCart_total(),addr);//sales�뿉 �꽔
 	      }
 	      for(int j=0;j<ad.length;j++) {
 	         dao.cart_delete(ad[j]);
@@ -510,12 +511,12 @@ public class ShopController {
 	       
 	       String basemile =request.getParameter("basemile");
 	       String usingmile = request.getParameter("usingmile"); 
-	       int a= Integer.parseInt(basemile);//기존 마일리지
-	       int b= Integer.parseInt(point);//적립될 마일리지
-	       int c= Integer.parseInt(usingmile);//기존마일리지에서 사용할 마일리지
+	       int a= Integer.parseInt(basemile);//湲곗〈 留덉씪由ъ�
+	       int b= Integer.parseInt(point);//�쟻由쎈맆 留덉씪由ъ�
+	       int c= Integer.parseInt(usingmile);//湲곗〈留덉씪由ъ��뿉�꽌 �궗�슜�븷 留덉씪由ъ�
 	      
 	       
-	       int mymileage = a + b;//최종 내 마일리지
+	       int mymileage = a + b;//理쒖쥌 �궡 留덉씪由ъ�
 	       
 	       dao.mileage_update(mymileage,dto2.getM_id());
 	      
@@ -547,7 +548,7 @@ public class ShopController {
 
 }
 //-------------------------------------------------------------------------------------------//
-	//마이페이지 결제내역(기본)
+	//留덉씠�럹�씠吏� 寃곗젣�궡�뿭(湲곕낯)
 	   @RequestMapping(value="/mypage" )
 	   public String mypage_payHistory(HttpServletRequest request,Model model) {
 	      System.out.println("mypage_payHistory()");
@@ -566,7 +567,7 @@ public class ShopController {
 	      
 	}
 	   
-	//마이페이지 날짜별로 조회   
+	//留덉씠�럹�씠吏� �궇吏쒕퀎濡� 議고쉶   
 	   @RequestMapping(value="/mypage1" ,method= RequestMethod.POST , produces = "application/text; charset=utf8")
 	   public @ResponseBody String mypage(HttpServletRequest request,Model model) {
 	      System.out.println("mypage_payHistory()");
@@ -589,7 +590,7 @@ public class ShopController {
 
 	      
 	}
-	   //마이페이지 마일리지
+	   //留덉씠�럹�씠吏� 留덉씪由ъ�
 	      @RequestMapping(value="/mypage_mileage")
 	      public String mypage_mileage(HttpServletRequest request,Model model) {
 	         System.out.println("mypage_mileage()");
@@ -616,7 +617,7 @@ public class ShopController {
 	         }
 	   }
 	   
-	//마이페이지 내정보
+	//留덉씠�럹�씠吏� �궡�젙蹂�
 	   @RequestMapping(value="/mypage_myInfo")
 	   public String mypage_myInfo(HttpServletRequest request,Model model) {
 	      System.out.println("mypage_myInfo()");
@@ -635,7 +636,7 @@ public class ShopController {
 	         return "redirect:login";
 	      }
 	}
-	//마이페이지 이전 비밀번호 확인방법
+	//留덉씠�럹�씠吏� �씠�쟾 鍮꾨�踰덊샇 �솗�씤諛⑸쾿
 	   @RequestMapping(value="/mypage_pwconfirm",method= RequestMethod.POST )
 	   public @ResponseBody String mypage_pwconfirm(HttpServletRequest request,Model model) {
 	      System.out.println("mypage_pwconfirm()");
@@ -656,7 +657,7 @@ public class ShopController {
 	      }
 	      
 	}
-	//내정보수정   
+	//�궡�젙蹂댁닔�젙   
 	   @RequestMapping(value="/mypage_update",method= RequestMethod.POST )
 	   public @ResponseBody String mypage_update(HttpServletRequest request,Model model) {
 	      System.out.println("mypage_mileage()");
@@ -682,7 +683,7 @@ public class ShopController {
 	}
 	   
 	   
-	   //마이페이지 찜한내역 불러오기
+	   //留덉씠�럹�씠吏� 李쒗븳�궡�뿭 遺덈윭�삤湲�
 	      @RequestMapping(value="/mypage_heart" )
 	      public String mypage_heart(HttpServletRequest request,Model model) {
 	         System.out.println("mypage_heart()");
@@ -703,7 +704,7 @@ public class ShopController {
 	         
 	   }
 	      
-	   //찜한내역 삭제
+	   //李쒗븳�궡�뿭 �궘�젣
 	      @RequestMapping(value="/heart_delete")
 	      public String heart_delete(HttpServletRequest request,Model model) {
 	         System.out.println("heart_delete()");
@@ -718,7 +719,7 @@ public class ShopController {
 	         
 	            return "redirect:mypage_heart";   
 	      }
-	    //찜한내역모두비우기
+	    //李쒗븳�궡�뿭紐⑤몢鍮꾩슦湲�
 	      @RequestMapping(value="/heart_empty")
 	      public String heart_empty(HttpServletRequest request,Model model) {
 	         System.out.println("heart_empty()");
@@ -732,7 +733,7 @@ public class ShopController {
 	    
 
 //-------------------------------------------------------------------------------------------//		
-//상품 페이지
+//�긽�뭹 �럹�씠吏�
 	@RequestMapping("/product")
 	public String product(HttpServletRequest request,Model model) {
 	   System.out.println("product()");
@@ -746,27 +747,27 @@ public class ShopController {
 	      model.addAttribute("score",dao.product_select(s_id));
 	      model.addAttribute("s_id",s_id);
 	      
-	      //찜되어있나 확인
+	      //李쒕릺�뼱�엳�굹 �솗�씤
 	      String mid = dto2.getM_id();
 	      int sid = Integer.parseInt(s_id);
 	      System.out.println("s_id["+sid+"] m_id["+mid+"]");
 	      Heart product_heart = dao.product_heart(mid,sid);
 	      model.addAttribute("heart",product_heart);
 	      
-	      //최신클릭한거
+	      //理쒖떊�겢由��븳嫄�
 	      ArrayList<Newlist> newlist = dao.newlist_compare(dto2.getM_id(),s_id);
 	      if(newlist.size()==0) {
-	    	  //테이블의 첫번째 레코드 고유아이디 가져오기
+	    	  //�뀒�씠釉붿쓽 泥ル쾲吏� �젅肄붾뱶 怨좎쑀�븘�씠�뵒 媛��졇�삤湲�
 	    	  ArrayList<String> rowid = dao.newlist_rowid(dto2.getM_id());
-	    	  //안겹치면 첫번째 레코드 삭제
+	    	  //�븞寃뱀튂硫� 泥ル쾲吏� �젅肄붾뱶 �궘�젣
 	    	  dao.newlist_delete(dto2.getM_id(),rowid.get(0));
 	      } else {
-	    	  //겹치면삭제
+	    	  //寃뱀튂硫댁궘�젣
 	    	  dao.newlist_delete2(dto2.getM_id(),s_id);
 	      }
-	      //추가
+	      //異붽�
 	      dao.newlist_insert(dto2.getM_id(),s_id); 
-	      //최신목록 출력
+	      //理쒖떊紐⑸줉 異쒕젰
 	      ArrayList<Newlist> sideImg=dao.sideImg(dto2.getM_id());
 	      model.addAttribute("sideImg",sideImg);
 	      
@@ -780,7 +781,7 @@ public class ShopController {
 	   }
 	}
 
-	//단독상품 주문페이지
+	//�떒�룆�긽�뭹 二쇰Ц�럹�씠吏�
     @RequestMapping(value="/pay_product" ,produces="text/plain;charset=UTF-8")
     public String pay_product(HttpServletRequest request,Model model) {
        System.out.println("pay_product()");
@@ -826,12 +827,12 @@ public class ShopController {
     @RequestMapping(value="/pay_complete2",method = RequestMethod.GET ,produces="text/plain;charset=UTF-8")
     public String pay_complete2(HttpServletRequest request,Model model) {
        System.out.println("pay_complete2()");
-       String del = request.getParameter("s_id"); //상품번호
-       String count = request.getParameter("total"); //갯수
-       String point = request.getParameter("point"); //적립금
+       String del = request.getParameter("s_id"); //�긽�뭹踰덊샇
+       String count = request.getParameter("total"); //媛��닔
+       String point = request.getParameter("point"); //�쟻由쎄툑
        int total = Integer.parseInt(count); //
-       int dels = Integer.parseInt(del); //상품번호 숫자로 변환
-       String addr = request.getParameter("addr"); //주소(스크립트에서 ','로 있는 더함)
+       int dels = Integer.parseInt(del); //�긽�뭹踰덊샇 �닽�옄濡� 蹂��솚
+       String addr = request.getParameter("addr"); //二쇱냼(�뒪�겕由쏀듃�뿉�꽌 ','濡� �엳�뒗 �뜑�븿)
        System.out.println(addr);
        HttpSession session=request.getSession();
        loginDto dto2=(loginDto) session.getAttribute("loginuser");
@@ -843,12 +844,12 @@ public class ShopController {
        
        String basemile =request.getParameter("basemile");
        String usingmile = request.getParameter("usingmile"); 
-       int a= Integer.parseInt(basemile);//기존 마일리지
-       int b= Integer.parseInt(point);//적립될 마일리지
+       int a= Integer.parseInt(basemile);//湲곗〈 留덉씪由ъ�
+       int b= Integer.parseInt(point);//�쟻由쎈맆 留덉씪由ъ�
 
       
        
-       int mymileage = a + b;//최종 내 마일리지
+       int mymileage = a + b;//理쒖쥌 �궡 留덉씪由ъ�
        
        dao.mileage_update(mymileage,dto2.getM_id());
        ArrayList<Newlist> sideImg=dao.sideImg(dto2.getM_id());
@@ -874,7 +875,7 @@ public class ShopController {
           return "pay_complete2";
        
  }	
-	//찜하기
+	//李쒗븯湲�
     @RequestMapping(value="/heart_insert",method= RequestMethod.POST )
     public @ResponseBody String heart_insert(HttpServletRequest request,Model model) {
        System.out.println("heart_insert()");
@@ -895,7 +896,7 @@ public class ShopController {
        }
      
  }
-    //찜하기 취소
+    //李쒗븯湲� 痍⑥냼
     @RequestMapping(value="/heart_cancel",method= RequestMethod.POST)
     public @ResponseBody String heart_cancel(HttpServletRequest request,Model model) {
        System.out.println("heart_cancel()");
@@ -918,7 +919,7 @@ public class ShopController {
 //-------------------------------------------------------------------------------------------//		
 	
 
-//회원가입 (join) -> 가입시 - DB[insert]
+//�쉶�썝媛��엯 (join) -> 媛��엯�떆 - DB[insert]
 	@RequestMapping(value="/member_insert",method=RequestMethod.POST)
 	public @ResponseBody void member_insert(HttpServletRequest hsr,Model model) {
 	   System.out.println("member_insert");
@@ -941,16 +942,16 @@ public class ShopController {
 	}
 	
 	
-//회원가입(join) -> 메일보내기(인증번호)
+//�쉶�썝媛��엯(join) -> 硫붿씪蹂대궡湲�(�씤利앸쾲�샇)
 		@RequestMapping(value = "/mailSender",method = RequestMethod.POST)
 		public @ResponseBody void mailSender(HttpServletRequest request,HttpServletResponse response,ModelMap mo) throws AddressException,MessagingException{
 		   String email=request.getParameter("email");
 		   String pass=request.getParameter("pass");
-		   pass="인증번호는 "+pass+" 입니다.";
+		   pass="�씤利앸쾲�샇�뒗 "+pass+" �엯�땲�떎.";
 		   Email emails = new Email();
 		   emails.EmailSend(email,pass);
 		}
-//fqa고객센터----------------------------------------------------------------------------------------------------------------------------------------------
+//fqa怨좉컼�꽱�꽣----------------------------------------------------------------------------------------------------------------------------------------------
 	   
 		
 		@RequestMapping("/fqa_delete")
@@ -1081,7 +1082,7 @@ public class ShopController {
 			return"redirect:fqa_content_view?fqa_id="+fqa_id+"&m_id="+dto.getM_id();
 		}
 //---------------------------------------------------------------------------------------------------
-//페이징 fqalist
+//�럹�씠吏� fqalist
 		@RequestMapping("/fqa_list")
 		public String list(HttpServletRequest request,Model model) {
 			System.out.println("fqa_list()");
@@ -1091,7 +1092,7 @@ public class ShopController {
 			IDao dao=sqlSession.getMapper(IDao.class);
 			ArrayList<fqaDto> list=dao.list();
 			model.addAttribute("list",list);
-			//페이징
+			//�럹�씠吏�
 			String st=request.getParameter("pageNum");
 			Paging paging = new Paging();
 			paging.page(dao.fqa_total(),st,model);	
@@ -1105,7 +1106,7 @@ public class ShopController {
 		}
 		}
 		
-//상품페이지
+//�긽�뭹�럹�씠吏�
 		//-----------------------------------------------------------------------------------------------------------------------------------
 	@RequestMapping("/products")
 	   public String products(HttpServletRequest request,Model model) {
@@ -1116,33 +1117,33 @@ public class ShopController {
 	      IDao dao=sqlSession.getMapper(IDao.class);
 	      
 	    if(session.getAttribute("loginuser")!=null) {
-		      //페이징하기
-			  String st=request.getParameter("pageNum"); //몇번째 페이지인지
-			  Paging paging = new Paging(); //Paging객체를 인스턴스
-			  paging.page(dao.score_total(),st,model); //Paging 메소드 호출
-			  ArrayList<Score> scores =dao.score(paging.endRow,paging.startRow); //한페이지당 보여줄 데이터 조회
+		      //�럹�씠吏뺥븯湲�
+			  String st=request.getParameter("pageNum"); //紐뉖쾲吏� �럹�씠吏��씤吏�
+			  Paging paging = new Paging(); //Paging媛앹껜瑜� �씤�뒪�꽩�뒪
+			  paging.page(dao.score_total(),st,model); //Paging 硫붿냼�뱶 �샇異�
+			  ArrayList<Score> scores =dao.score(paging.endRow,paging.startRow); //�븳�럹�씠吏��떦 蹂댁뿬以� �뜲�씠�꽣 議고쉶
 		      model.addAttribute("score",scores);
 		      
-		      //사용자 이름
+		      //�궗�슜�옄 �씠由�
 		      model.addAttribute("home",dto);
-		      //최신목록
+		      //理쒖떊紐⑸줉
 		      ArrayList<Score> newScore=dao.newScore();
 		      model.addAttribute("newScore",newScore);
-		      //최근 복 목록
+		      //理쒓렐 蹂� 紐⑸줉
 		      ArrayList<Newlist> sideImg=dao.sideImg(dto.getM_id());
 		      model.addAttribute("sideImg",sideImg);
 		      
 		      return "loginproducts";
 	   }else {
-			  System.out.println("페이징함수");
-			  //페이징하기
+			  System.out.println("�럹�씠吏뺥븿�닔");
+			  //�럹�씠吏뺥븯湲�
 			  String st=request.getParameter("pageNum");
 			  Paging paging = new Paging();
 			  paging.page(dao.score_total(),st,model);
 			  ArrayList<Score> scores =dao.score(paging.endRow,paging.startRow);
 		      model.addAttribute("score",scores);
 		      
-		      //최신목록
+		      //理쒖떊紐⑸줉
 		      ArrayList<Score> newScore=dao.newScore();
 		      model.addAttribute("newScore",newScore);
 		      
@@ -1151,7 +1152,7 @@ public class ShopController {
 	}
 		
 //productssel
-//악기별  카테고리 --------------------------------------------------------------------------------------------------------------------------------
+//�븙湲곕퀎  移댄뀒怨좊━ --------------------------------------------------------------------------------------------------------------------------------
 	@RequestMapping("/productssel")
 	public String productssel(HttpServletRequest request,Model model) {
 	   System.out.println("productssel()");
@@ -1161,27 +1162,27 @@ public class ShopController {
 	   String products=request.getParameter("products");
 	   model.addAttribute("pros",products);
 	   if(session.getAttribute("loginuser")!=null) {
-		 //페이징하기
+		 //�럹�씠吏뺥븯湲�
 		  String st=request.getParameter("pageNum");
 		  Paging paging = new Paging();
 		  paging.page(dao.parts_total(products),st,model);
 		  ArrayList<Score> scores =dao.parts(paging.endRow,paging.startRow,products);
 		  model.addAttribute("score",scores);
-		  //사용자이름
+		  //�궗�슜�옄�씠由�
 		  model.addAttribute("home",dto);
-		  //최신목록
+		  //理쒖떊紐⑸줉
 		  ArrayList<Score> newScore=dao.newScore();
 	      model.addAttribute("newScore",newScore);
 	      
 	      return "loginproductssel";
 	}else {
-		 //페이징하기
+		 //�럹�씠吏뺥븯湲�
 		  String st=request.getParameter("pageNum");
 		  Paging paging = new Paging();
 		  paging.page(dao.parts_total(products),st,model);
 		  ArrayList<Score> scores =dao.parts(paging.endRow,paging.startRow,products);
 		  model.addAttribute("score",scores);
-		  //최신목록
+		  //理쒖떊紐⑸줉
 	      ArrayList<Score> newScore=dao.newScore();
 	      model.addAttribute("newScore",newScore);
 	     
@@ -1189,7 +1190,7 @@ public class ShopController {
 	}
 }
 	
-	//장르볗----------------------------------------------------------------------------------------------------------------------------------------
+	//�옣瑜대퀣----------------------------------------------------------------------------------------------------------------------------------------
 	   @RequestMapping("/genre")
 	   public String genre(HttpServletRequest request,Model model) {
 	      System.out.println("products()");
@@ -1201,7 +1202,7 @@ public class ShopController {
 	      model.addAttribute("newScore",newScore);
 	      
 	      if(session.getAttribute("loginuser")!=null) {
-	    	//페이징하기
+	    	//�럹�씠吏뺥븯湲�
 			  String st=request.getParameter("pageNum");
 			  Paging paging = new Paging();
 			  paging.page(dao.score_total(),st,model);
@@ -1215,7 +1216,7 @@ public class ShopController {
 		      
 		      return "logingenre";
 	      }else {
-		   	  //페이징하기
+		   	  //�럹�씠吏뺥븯湲�
 			  String st=request.getParameter("pageNum");
 			  Paging paging = new Paging();
 			  paging.page(dao.score_total(),st,model);
@@ -1226,7 +1227,7 @@ public class ShopController {
 	      }
 	   }
 	   
-	   //장르볗 카테고리 
+	   //�옣瑜대퀣 移댄뀒怨좊━ 
 	   @RequestMapping("/genresel")
 	   public String genresel(HttpServletRequest request,Model model) {
 	      System.out.println("genresel()");
@@ -1236,25 +1237,25 @@ public class ShopController {
 	      String genre=request.getParameter("genre");
 	      model.addAttribute("gen",genre);
 	      if(session.getAttribute("loginuser")!=null) {
-	    	  //페이징
+	    	  //�럹�씠吏�
 	    	  String st=request.getParameter("pageNum");
 			  Paging paging = new Paging();
 			  paging.page(dao.genre_total(genre),st,model);
 			  ArrayList<Score> scores =dao.genre(paging.endRow,paging.startRow,genre);
 		      model.addAttribute("score",scores);	      
-		      //사용자 이름
+		      //�궗�슜�옄 �씠由�
 		      model.addAttribute("home",dto);
-		      //최신목록
+		      //理쒖떊紐⑸줉
 		      ArrayList<Score> newScore=dao.newScore();
 		      model.addAttribute("newScore",newScore);
 		      
-		      //최근 본 목록
+		      //理쒓렐 蹂� 紐⑸줉
 		      ArrayList<Newlist> sideImg=dao.sideImg(dto.getM_id());
 		      model.addAttribute("sideImg",sideImg);
 	       
 		      return "logingenre";
 	      }else {
-			 //페이징
+			 //�럹�씠吏�
 	    	  String st=request.getParameter("pageNum");
 			  Paging paging = new Paging();
 			  paging.page(dao.genre_total(genre),st,model);
@@ -1268,8 +1269,8 @@ public class ShopController {
 		   }
 	   }
 	   
-	  //공지사항 --------------------------------------------------------------------------------------------------------------------------------
-	 //공지사항
+	  //怨듭��궗�빆 --------------------------------------------------------------------------------------------------------------------------------
+	 //怨듭��궗�빆
 	      @RequestMapping("/notice_list")
 	      public String notice_list(HttpServletRequest request,Model model) {
 	         System.out.println("notice_list()");
@@ -1278,7 +1279,7 @@ public class ShopController {
 	         String temp=(String) session.getAttribute("notc");
 	         IDao dao=sqlSession.getMapper(IDao.class);
 	         if(session.getAttribute("loginuser")==null){
-	        	 //페이징
+	        	 //�럹�씠吏�
 	        	 String st=request.getParameter("pageNum");
 				 Paging paging = new Paging();
 				 paging.page(dao.notice_total(),st,model);
@@ -1290,7 +1291,7 @@ public class ShopController {
 		          
 		         return "notice_list2";     
 	         }else if("seungmi".equals(dto.getM_id())) {
-	        	//페이징
+	        	//�럹�씠吏�
 	        	 String st=request.getParameter("pageNum");
 				 Paging paging = new Paging();
 				 paging.page(dao.notice_total(),st,model);
@@ -1300,7 +1301,7 @@ public class ShopController {
 		         
 		         return "notice_list";
 	      }else if(!"seungmi".equals(dto.getM_id())){
-    	  	 //페이징
+    	  	 //�럹�씠吏�
         	 String st=request.getParameter("pageNum");
 			 Paging paging = new Paging();
 			 paging.page(dao.notice_total(),st,model);
@@ -1315,7 +1316,7 @@ public class ShopController {
 	         return "notice_list3";
 	      }
 	   }
-//공지사항 목록에서 -> 내용보기
+//怨듭��궗�빆 紐⑸줉�뿉�꽌 -> �궡�슜蹂닿린
       @RequestMapping("/notice_content_view")
       public String notice_content_view(HttpServletRequest request,Model model) {
          System.out.println("notice_content_view()");
@@ -1345,7 +1346,7 @@ public class ShopController {
                return "notice2";
          }
       }
-//공지사항 목록에서 -> 수정하기 
+//怨듭��궗�빆 紐⑸줉�뿉�꽌 -> �닔�젙�븯湲� 
           @RequestMapping("/notice_modify")
           public String notice_modify(HttpServletRequest request,Model model) {
              System.out.println("notice_modify()");
@@ -1363,7 +1364,7 @@ public class ShopController {
              
           }
           
-//공지사항 목록에서 -> 수정완료
+//怨듭��궗�빆 紐⑸줉�뿉�꽌 -> �닔�젙�셿猷�
       @RequestMapping(value="/notice_mo",produces="text/plain;charset=UTF-8")
       public String notice_mo(HttpServletRequest request,Model model) {
          System.out.println("notice_modify()");
@@ -1376,7 +1377,7 @@ public class ShopController {
          model.addAttribute("home",dto);
          return"redirect:notice_content_view?notice_id="+notice_id+"&m_id="+dto.getM_id();
       }
-//공지사항 삭제하기
+//怨듭��궗�빆 �궘�젣�븯湲�
       @RequestMapping(value="/notice_delete",produces="text/plain;charset=UTF-8")
       public String notice_delete(HttpServletRequest request,Model model) {
          System.out.println("notice_delete()");
@@ -1391,7 +1392,7 @@ public class ShopController {
          return "redirect:notice_list?pageNum=1";
       }
 	    
-//공지사항 쓰기
+//怨듭��궗�빆 �벐湲�
       @RequestMapping("/notice_write_view")
       public String notice_write_view(HttpServletRequest request,Model model) {
          System.out.println("notice_write_view()");
@@ -1409,7 +1410,7 @@ public class ShopController {
          }
       }
       
-//공지사항 글쓰기 완료
+//怨듭��궗�빆 湲��벐湲� �셿猷�
       @RequestMapping(value="/notice_write",method=RequestMethod.POST)
       public String notice_write(HttpServletRequest request,Model model) {
          System.out.println("notice_write()");
@@ -1439,18 +1440,18 @@ public class ShopController {
 			  String iss=request.getParameter("search");
 				
 		      if(session.getAttribute("loginuser")!=null) {
-		    	 //DB갯수 레코드 갯수 확인
+		    	 //DB媛��닔 �젅肄붾뱶 媛��닔 �솗�씤
 		    	 int total=dao.search_total(id,iss);
-		    	 //페이징
+		    	 //�럹�씠吏�
 	        	 String st=request.getParameter("pageNum");
 				 Paging paging = new Paging();
 				 paging.page(dao.search_total(id,iss),st,model);
 		         ArrayList<Score> score=dao.search_select(paging.endRow,paging.startRow,id,iss);
 			     model.addAttribute("score",score);
 			     
-			     //최신목록
+			     //理쒖떊紐⑸줉
 			     ArrayList<Score> newScore=dao.newScore();
-			     //최근 본 목록
+			     //理쒓렐 蹂� 紐⑸줉
 			     ArrayList<Newlist> sideImg=dao.sideImg(dto.getM_id());
 		      
 			     model.addAttribute("home",dto);
@@ -1466,9 +1467,9 @@ public class ShopController {
 		    	  return "search_products_login";
 		      }
 		   }else {
-			   //DB갯수 레코드 갯수 확인
+			   //DB媛��닔 �젅肄붾뱶 媛��닔 �솗�씤
 		       int total=dao.search_total(id,iss);
-		       //페이징
+		       //�럹�씠吏�
 			   String st=request.getParameter("pageNum");
 			   Paging paging = new Paging();
 			   paging.page(dao.search_total(id,iss),st,model);
