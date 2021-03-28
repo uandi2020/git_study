@@ -54,7 +54,7 @@ public class ShopController {
 			return "base_html";
 		}
 	
-//筌롫뗄�뵥占쎌냳占쎈읂占쎌뵠筌욑옙
+//2
 	@RequestMapping("/homes")
 	public String homes(HttpServletRequest request,Model model) {
 		System.out.println("homes()");
